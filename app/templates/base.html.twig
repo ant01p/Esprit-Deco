@@ -13,6 +13,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap">
         <link rel="stylesheet" href="{{ asset('styles/header.css') }}">
+        <link rel="stylesheet" href="{{ asset('styles/general.css') }}">
     </head>
 
     <body class="">
@@ -21,6 +22,10 @@
 
         {{ include('_shared/_nav.html.twig') }}
        
+        <main>
+            {% block body %}{% endblock %}
+        </main>
+
         {{ include('_shared/_footer.html.twig') }}
 
     </body>

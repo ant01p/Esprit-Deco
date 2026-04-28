@@ -1,4 +1,18 @@
-{# FOOTER #}
-        <footer class="site-footer text-center text-white py-3">
-            <p>&copy; {{ "now"|date("Y") }} Esprit-Deco. All rights reserved.</p>
-        </footer>
+ <footer class="bg-light text-dark py-3 mt-auto">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-4 text-decoration-none">
+                    <a href="#" class="text-dark text-decoration-none">Consulter les CGV</a>
+                </div>
+                <div class="col-md-4">
+                     <img src="{{ asset('images/logo.png') }}"
+                        alt="Esprit Déco"
+                        class="img-fluid logo-header mb-2">
+                </div>
+                <div class="col-md-4">
+                    &copy; {{ "now"|date("Y") }}
+                    EspritDéco
+                </div>
+            </div>
+        </div>
+    </footer>
