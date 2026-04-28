@@ -3,7 +3,7 @@ body {
 }
 
 .site-header {
-    background-image: url('/images/header.webp');
+    background-image: url('/images/layouts/header.webp');
     background-size: cover;
     background-position: center;
     display: flex;
