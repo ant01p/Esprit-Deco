@@ -18,9 +18,9 @@
             {% endif %}
 
             <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
-            <label for="username">Email</label>
+            <label for="username" class="mb-2">Email</label>
             <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
-            <label for="password">Mot de passe</label>
+            <label for="password" class="my-2">Mot de passe</label>
             <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
             <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 
