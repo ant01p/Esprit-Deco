@@ -1,17 +1,18 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
     <div class="container-fluid">
 
-        <img src="{{ asset('images/layouts/logo.png') }}" alt="Esprit Déco" class="img-fluid logo-nav">
+        <a href="{{ path('app_item_index') }}">
+            <img src="{{ asset('images/layouts/logo.png') }}" alt="Esprit Déco" class="img-fluid logo-nav">
+        </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor04" aria-controls="navbarColor04" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-           Menu
         </button>
         <div class="collapse navbar-collapse" id="navbarColor04">
             <ul class="navbar-nav me-auto">
                 
                 <li class="nav-item">
-                    <a class="nav-link mx-3" href="#">Boutique</a>
+                    <a class="nav-link mx-3" href="{{ path('app_item_index') }}">Boutique</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" 

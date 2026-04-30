@@ -15,7 +15,18 @@ class ProductRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Product::class);
     }
-
+     
+    public function findAllWithCategoryAndImages(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.category', 'c')
+            ->addSelect('c')
+            ->leftJoin('p.images', 'i')
+            ->addSelect('i')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     //    /**
     //     * @return Product[] Returns an array of Product objects
     //     */
