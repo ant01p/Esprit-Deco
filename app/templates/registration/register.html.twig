@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Enregistrement{% endblock %}
+
+{% block body %}
+    <main>
+        {% for flash_error in app.flashes('verify_email_error') %}
+            <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+        {% endfor %}
+
+        <h1 class="h3 mb-3 font-weight-normal">Enregistrement</h1>
+
+        {{ form_errors(registrationForm) }}
+
+        {{ form_start(registrationForm) }}
+            <div>
+                {{ form_label(registrationForm.email, 'Email',
+                    label_attr: { class: 'form-label' }
+                ) }}
+                {{ form_errors(registrationForm.email) }}
+                {{ form_widget(registrationForm.email, {
+                    attr: {
+                        'class': 'form-control',
+                    }
+                }) }}
+            </div>
+            <div>
+                {{ form_label(registrationForm.plainPassword, 'Mot de passe', {
+                    label_attr: {'class': 'form-label'}
+                }) }}
+                {{ form_errors(registrationForm.plainPassword) }}
+                {{ form_widget(registrationForm.plainPassword, {
+                    attr: {
+                        'class': 'form-control',
+                    }
+                }) }}
+            </div>
+            <div class="d-flex align-items-center">
+                {{ form_widget(registrationForm.acceptCgv, {
+                    label_html: true,
+                    label: "J'accepte les <a href='" ~ asset('documents/cgv.pdf') ~ "' target='_blank' download>conditions générales de vente</a>"
+                }) }}
+            </div>
+            {{ form_errors(registrationForm.acceptCgv) }}
+
+            <button type="submit" class="btn btn-lg btn-primary mt-3">Enregistrement</button>
+        {{ form_end(registrationForm) }}
+    </main>
+{% endblock %}

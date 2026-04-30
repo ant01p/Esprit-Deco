@@ -18,16 +18,16 @@
                         role="button" aria-haspopup="true" aria-expanded="false">Connexion
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Connexion</a>
-                        <a class="dropdown-item" href="#">Enregistrement</a>
+                        <a class="dropdown-item" href="{{ path('app_login') }}">Connexion</a>
+                        <a class="dropdown-item" href="{{ path('app_register') }}">Enregistrement</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Déconnexion</a>
+                        <a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a>
                     </div>
                 </li>
             </ul>
             <form class="d-flex">
                 <input class="form-control me-sm-2" type="search" placeholder="Recherche">
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit">🔍</button>
+                <button class="btn btn-secondary my-2 my-sm-0 mt-2" type="submit">🔍</button>
             </form>
         </div>
     </div>
