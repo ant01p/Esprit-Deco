@@ -16,12 +16,12 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
      
-    public function findAllWithCategoryAndImages(): array
+    public function findAllWithPrincipalImage(): array
     {
         return $this->createQueryBuilder('p')
             ->leftJoin('p.category', 'c')
             ->addSelect('c')
-            ->leftJoin('p.images', 'i')
+            ->leftJoin('p.images', 'i', 'WITH', 'i.isPrincipal = true')
             ->addSelect('i')
             ->getQuery()
             ->getResult()

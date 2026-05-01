@@ -12,7 +12,7 @@ final class ItemController extends AbstractController
     #[Route('/', name: 'app_item_index')]
     public function index(ProductRepository $productRepository): Response
     {
-        $products = $productRepository->findAllWithCategoryAndImages();
+        $products = $productRepository->findAllWithPrincipalImage();
 
         return $this->render('item/index.html.twig', [
             'products'=> $products,

@@ -7,38 +7,25 @@
     <div class="row g-4">
         {% for product in products %}
 
-            {% set principalImage = null %}
-
-            {% for image in product.images %}
-                {% if image.isPrincipal %}
-                    {% set principalImage = image %}
-                {% endif %}
-            {% endfor %}
+            {% set image = product.images|first %}
 
             <div class="col-12 col-md-6 col-lg-3">
-
                 <div class="card h-100">
 
-                    <a href="#" class="text-decoration-none text-white"></a>
+                    <a href="#" class="text-decoration-none text-white">
                         <h3 class="card-header text-center">
                             {{ product.title }}
                         </h3>
                     </a>
 
-                    {% if principalImage %}
+                    {% if image %}
+                        <img src="{{ asset(image.path) }}" alt="{{ image.alt }}" class="product-img">
 
-                        <img src="{{ asset(principalImage.path) }}" 
-                            alt="{{ principalImage.alt }}" 
-                            class="product-img"
-                        >
                     {% else %}
-                        
                         <div class="no-img">🚫</div>
-                        
                     {% endif %}
                     
                     <div class="card-body">
-                        
                         {% set words = product.description|split(' ') %}
 
                         <p class="card-text">
@@ -59,7 +46,6 @@
 
                     </div>
                 </div>
-                
             </div>
 
         {% else %}
