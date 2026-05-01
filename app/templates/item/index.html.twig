@@ -2,4 +2,55 @@
 
 {% block body %}
 
+    <h1 class="text-center mb-4">Nos produits</h1>
+
+    <div class="row g-4">
+        {% for product in products %}
+
+            {% set image = product.images|first %}
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card h-100">
+
+                    <a href="#" class="text-decoration-none text-white">
+                        <h3 class="card-header text-center">
+                            {{ product.title }}
+                        </h3>
+                    </a>
+
+                    {% if image %}
+                        <img src="{{ asset(image.path) }}" alt="{{ image.alt }}" class="product-img">
+
+                    {% else %}
+                        <div class="no-img">🚫</div>
+                    {% endif %}
+                    
+                    <div class="card-body">
+                        {% set words = product.description|split(' ') %}
+
+                        <p class="card-text">
+                            {{ words|slice(0, 20)|join(' ') }}
+                            {% if words|length > 20 %}...{% endif %}
+                        </p>
+                    </div>
+                
+                    <div class="card-footer text-muted d-flex flex-column flex-md-row align-items-center justify-content-md-between">
+    
+                        <span class="mb-2 mb-md-0">
+                            {{ product.category.name }}
+                        </span>
+
+                        <span class="badge rounded-pill bg-primary px-3">
+                            {{ product.price|number_format(2, ',', ' ') }} €
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+
+        {% else %}
+            <p class="text-center">Aucun produit</p>
+        {% endfor %}
+    </div>
+
 {% endblock %}
