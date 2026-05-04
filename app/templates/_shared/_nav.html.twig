@@ -12,10 +12,15 @@
             <ul class="navbar-nav me-auto">
                 
                 <li class="nav-item">
-                    <a class="nav-link mx-3" href="{{ path('app_item_index') }}">Boutique</a>
+                    <a class="nav-link mx-2" href="{{ path('app_item_index') }}">Boutique</a>
                 </li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="{{ path('app_admin') }}">Espace Administrateur</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" 
+                    <a class="nav-link dropdown-toggle mx-2" data-bs-toggle="dropdown" href="#" 
                         role="button" aria-haspopup="true" aria-expanded="false">Connexion
                     </a>
                     <div class="dropdown-menu">
