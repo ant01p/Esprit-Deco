@@ -23,7 +23,7 @@ final class AdminController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $products = $productRepository->findAllForAdmin();
+        $products = $productRepository->findAllWithCategories();
 
         return $this->render('admin/product/index.html.twig', [
             'products' => $products,

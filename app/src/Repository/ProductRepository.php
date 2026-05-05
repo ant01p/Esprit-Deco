@@ -44,15 +44,12 @@ class ProductRepository extends ServiceEntityRepository
         ;
     }
 
-    //admin-produits
-    public function findAllForAdmin(): array
+    //admin-products
+    public function findAllWithCategories(): array
     {
         return $this->createQueryBuilder('p')
             ->leftJoin('p.category', 'c')
             ->addSelect('c')
-            ->leftJoin('p.images', 'i')
-            ->addSelect('i')
-            ->orderBy('p.id', 'ASC')
             ->getQuery()
             ->getResult()
         ;
