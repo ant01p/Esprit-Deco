@@ -2,7 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use App\Repository\ProductRepository;
+use App\Service\ImageHandler;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -29,4 +33,26 @@ final class AdminController extends AbstractController
             'products' => $products,
         ]);
     }
+
+    #[Route('/admin/product/{id}/delete', name: 'admin_product_delete', methods: ['POST'])]
+    public function delete(Product $product, Request $request, EntityManagerInterface $entityManager, ImageHandler $imageHandler ): Response {
+   
+        //sécurité CSRF
+        if (!$this->isCsrfTokenValid('delete_product_' . $product->getId(), $request->request->get('_token'))) {
+            $this->addFlash('danger', 'Action invalide.');
+            return $this->redirectToRoute('admin_product_index');
+        }
+
+        $imageHandler->deleteFiles($product);
+
+        //suppression produit + images en BDD (cascade)
+        $entityManager->remove($product);
+        $entityManager->flush();
+
+        //message flash
+        $this->addFlash('success', 'Produit supprimé avec succès.');
+
+        return $this->redirectToRoute('admin_product_index');
+    }
 }
+
