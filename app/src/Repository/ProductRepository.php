@@ -16,6 +16,7 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
      
+    //index
     public function findAllWithPrincipalImage(): array
     {
         return $this->createQueryBuilder('p')
@@ -28,6 +29,7 @@ class ProductRepository extends ServiceEntityRepository
         ;
     }
 
+    //show
     public function findOneWithCategoryAndImages(int $id): ?Product
     {
         return $this->createQueryBuilder('p')
@@ -39,6 +41,17 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult()
+        ;
+    }
+
+    //admin-products
+    public function findAllWithCategories(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.category', 'c')
+            ->addSelect('c')
+            ->getQuery()
+            ->getResult()
         ;
     }
     //    /**

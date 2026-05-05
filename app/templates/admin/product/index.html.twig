@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des produits{% endblock %}
+
+{% block body %}
+
+    <h1 class="text-center mb-4">Gestion des produits</h1>
+
+    <div class="text-center mb-4">
+        <a href="#" class="badge rounded-pill bg-primary text-decoration-none">➕</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table text-center align-middle">
+            
+            <thead class="table-default">
+                <tr>
+                    <th>Titre</th>
+                    <th>Prix</th>
+                    <th>Catégorie</th>
+                    <th>Modifier</th>
+                    <th>Supprimer</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for product in products %}
+                    
+                    <tr class="{{ cycle(['table-light', 'table-secondary'], loop.index0) }}">
+                        
+                        <td class="text-decoration-none">
+                            <a href="{{ path('product_show', {
+                                id: product.id,
+                                back: path('admin_product_index')
+                            }) }}" class="text-decoration-none">
+                                {{ product.title }}
+                            </a>
+                        </td>
+
+                        <td>
+                            {{ product.price }} €
+                        </td>
+
+                        <td>
+                            {{ product.category.name }}
+                        </td>
+
+                        <td>
+                            <a href="#" class="text-decoration-none">✏️</a>
+                        </td>
+
+                        <td>
+                            <a href="#" class="text-decoration-none">❌</a>
+                        </td>
+
+                    </tr>
+
+                {% else %}
+                    <tr class="table-light">
+                        <td colspan="5">Aucun produit trouvé</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+    <div class="text-center mt-3">
+        <a href="{{ path('app_admin') }}" class="btn btn-primary text-decoration-none">Retour</a> 
+    </div>
+
+{% endblock %}
