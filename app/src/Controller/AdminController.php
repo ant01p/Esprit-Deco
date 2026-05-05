@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Repository\ProductRepository;
+use App\Service\ImageHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,7 +35,7 @@ final class AdminController extends AbstractController
     }
 
     #[Route('/admin/product/{id}/delete', name: 'admin_product_delete', methods: ['POST'])]
-    public function delete(Product $product, Request $request, EntityManagerInterface $entityManager ): Response {
+    public function delete(Product $product, Request $request, EntityManagerInterface $entityManager, ImageHandler $imageHandler ): Response {
    
         //sécurité CSRF
         if (!$this->isCsrfTokenValid('delete_product_' . $product->getId(), $request->request->get('_token'))) {
@@ -42,13 +43,7 @@ final class AdminController extends AbstractController
             return $this->redirectToRoute('admin_product_index');
         }
 
-        //suppression des images du dossier public/images
-        foreach ($product->getImages() as $image) {
-            $imagePath = $this->getParameter('kernel.project_dir') . '/public/' . $image->getPath();
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
-            }
-        }
+        $imageHandler->deleteFiles($product);
 
         //suppression produit + images en BDD (cascade)
         $entityManager->remove($product);
