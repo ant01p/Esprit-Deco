@@ -7,10 +7,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Service\ImageHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use App\Service\ImageHandler;
 
 final class AdminProductController extends AbstractController
 {
@@ -30,19 +30,22 @@ final class AdminProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             
             $imageFile = $form->get('imageFile')->getData();
-
+        
             if ($imageFile) {
-                try {
-                    $imageHandler->uploadFiles($product, $imageFile, $slugger, $entityManager);
-                } catch (\Exception $entityManager) {
-                    $this->addFlash('danger', 'Erreur lors de l\'upload de l\'image.');
-                }
+
+                $image = $imageHandler->uploadFiles(
+                    $product,
+                    $imageFile,
+                    $slugger
+                );
+
+                $entityManager->persist($image);
             }
 
             $entityManager->persist($product);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Le produit a bien été ajouté.');
+            $this->addFlash('success','Le produit a bien été ajouté.' );
 
             return $this->redirectToRoute('admin_product_index');
         }
