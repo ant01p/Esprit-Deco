@@ -13,6 +13,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+
 
     class ProductType extends AbstractType
 {
@@ -59,6 +61,18 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'constraints' => [
                     new Assert\NotBlank([
                         'message' => 'La catégorie est obligatoire.',
+                    ]),
+                ],
+            ])
+            ->add('imageFile', FileType::class, [
+                'label' => 'Image',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new Assert\File([
+                        'maxSize' => '2M',
+                        'extensions' => ['jpg', 'jpeg', 'png', 'webp'],
+                        'extensionsMessage' => 'Merci de choisir une image valide : jpg, jpeg, png ou webp.',
                     ]),
                 ],
             ])

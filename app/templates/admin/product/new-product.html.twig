@@ -31,6 +31,12 @@
                 {{ form_widget(form.category) }}
                 {{ form_errors(form.category) }}
             </div>
+            
+            <div class="mb-3">
+                {{ form_label(form.imageFile) }}
+                {{ form_widget(form.imageFile) }}
+                {{ form_errors(form.imageFile) }}
+            </div>
 
             <div class="text-end">
                 {{ form_row(form.submit, {
