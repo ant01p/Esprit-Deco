@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un produit{% endblock %}
+
+{% block body %}
+    <h1 class="text-center mb-4">Ajouter un produit</h1>
+
+    <div class="container">
+        {{ form_start(form) }}
+
+            <div class="mb-2">
+                {{ form_label(form.title) }}
+                {{ form_widget(form.title) }}
+                {{ form_errors(form.title) }}
+            </div>
+
+            <div class="mb-2">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div class="mb-2">
+                {{ form_label(form.price) }}
+                {{ form_widget(form.price) }}
+                {{ form_errors(form.price) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.category) }}
+                {{ form_widget(form.category) }}
+                {{ form_errors(form.category) }}
+            </div>
+
+            <div class="text-end">
+                {{ form_row(form.submit, {
+                    attr: {
+                        class: 'btn btn-primary'
+                    }
+                }) }}
+            </div>
+
+        {{ form_end(form) }}
+
+        <div class="text-center mt-4">
+            <a href="{{ path('admin_product_index') }}" class="btn btn-primary">
+                Retour
+            </a>
+        </div>
+    </div>
+{% endblock %}
