@@ -29,11 +29,9 @@
                     {% endif %}
                     
                     <div class="card-body">
-                        {% set words = product.description|split(' ') %}
-
                         <p class="card-text">
-                            {{ words|slice(0, 20)|join(' ') }}
-                            {% if words|length > 20 %}...{% endif %}
+                            {{ product.description|slice(0, 160) }}
+                            {% if product.description|length > 160 %}. . .{% endif %}
                         </p>
                     </div>
                 
