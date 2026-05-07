@@ -3,18 +3,22 @@ namespace App\Service;
 
 use App\Entity\Product;
 use App\Entity\Image;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use App\Repository\ProductRepository;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ImageHandler
 {
     private string $projectDir;
+    private RequestStack $requestStack;
+    private SluggerInterface $slugger;
 
-    public function __construct(string $projectDir)
+    public function __construct(string $projectDir, RequestStack $requestStack, SluggerInterface $slugger)
     {
         $this->projectDir = $projectDir;
+        $this->requestStack = $requestStack;
+        $this->slugger = $slugger;
     }
 
     public function deleteFiles(Product $product): void
@@ -28,30 +32,32 @@ class ImageHandler
         }
     }
 
-    public function uploadFiles(Product $product, UploadedFile $imageFile, SluggerInterface $slugger, EntityManager $entityManager): void
+    public function uploadFiles( UploadedFile $imageFile,): Image  
+       
     {
-        if ($imageFile) {
-            $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-            $safeFilename = $slugger->slug($originalFilename);
-            $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
+        $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = $this->slugger->slug($originalFilename);
+        $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
 
-            try {
-                $imageFile->move(
-                    $this->projectDir . '/public/images/product',
-                    $newFilename
-                );
+        try {
+            $imageFile->move(
+                $this->projectDir . '/public/images/product',
+                $newFilename
+            );
+        } catch (\Exception $e) {    
+            $this->requestStack
+                ->getSession()
+                ->getFlashBag()
+                ->add('danger', 'Erreur lors de l\'upload de l\'image.');
 
-                $image = new Image();
-                $image->setPath('images/product/' . $newFilename);
-                $image->setAlt($product->getTitle());
-                $image->setIsPrincipal(true);
-                $image->setProduct($product);
-
-                $entityManager->persist($image);
-
-            } catch (FileException $entityManager) {
-                throw new \Exception('Erreur lors de l\'upload de l\'image.');
-            }
+            throw $e;
         }
+
+        $image = new Image();
+
+        $image->setPath('images/product/' . $newFilename);
+        $image->setIsPrincipal(true);
+
+        return $image;
     }
 }
