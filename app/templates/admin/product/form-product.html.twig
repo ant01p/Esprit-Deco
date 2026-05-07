@@ -3,7 +3,13 @@
 {% block title %}Ajouter un produit{% endblock %}
 
 {% block body %}
-    <h1 class="text-center mb-4">Ajouter un produit</h1>
+    <h1 class="text-center mb-4">
+        {% if isNew %}
+            Ajouter un produit
+        {% else %}
+            Modifier un produit
+        {% endif %}
+    </h1>
 
     <div class="container">
         {{ form_start(form) }}

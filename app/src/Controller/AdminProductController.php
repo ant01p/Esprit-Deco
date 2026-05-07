@@ -14,10 +14,19 @@ use App\Service\ImageHandler;
 
 final class AdminProductController extends AbstractController
 {
-    #[Route('/admin/product/new', name: 'admin_product_new')]
-    public function new(Request $request, EntityManagerInterface $entityManager, ImageHandler $imageHandler): Response
-    {
-        $product = new Product();
+    #[Route('/admin/product/form/{id}', name: 'admin_product_form', defaults: ['id' => null])]
+    public function form(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        ImageHandler $imageHandler,
+        ?Product $product = null
+    ): Response {
+        $isNew = false;
+
+        if (!$product) {
+            $product = new Product();
+            $isNew = true;
+        }
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -26,7 +35,6 @@ final class AdminProductController extends AbstractController
             $imageFile = $form->get('imageFile')->getData();
 
             if ($imageFile) {
-
                 $image = $imageHandler->uploadFiles($imageFile);
                 $image->setAlt($product->getTitle());
                 $product->addImage($image);
@@ -34,16 +42,25 @@ final class AdminProductController extends AbstractController
                 $entityManager->persist($image);
             }
 
-            $entityManager->persist($product);
+            if ($isNew) {
+                $entityManager->persist($product);
+            }
+
             $entityManager->flush();
 
-            $this->addFlash('success', 'Le produit a bien été ajouté.');
+            if ($isNew) {
+                $this->addFlash('success', 'Le produit a bien été ajouté.');
+            } else {
+                $this->addFlash('success', 'Le produit a bien été modifié.');
+            }
 
             return $this->redirectToRoute('admin_product_index');
         }
 
-        return $this->render('admin/product/new-product.html.twig', [
+        return $this->render('admin/product/form-product.html.twig', [
             'form' => $form->createView(),
+            'product' => $product,
+            'isNew' => $isNew,
         ]);
     }
 }
