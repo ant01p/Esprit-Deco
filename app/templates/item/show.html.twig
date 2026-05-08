@@ -60,7 +60,7 @@
                     {{ product.price }} €
                 </span>
 
-                <a href="#" class="badge rounded-pill bg-secondary border border-warning text-decoration-none px-5 py-3">
+                <a href="{{ path('cart_add', { id: product.id }) }}" class="badge rounded-pill bg-secondary border border-warning text-decoration-none px-5 py-3">
                     Ajouter au panier
                 </a>
 

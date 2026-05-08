@@ -23,6 +23,7 @@
                     <a class="nav-link dropdown-toggle mx-2" data-bs-toggle="dropdown" href="#" 
                         role="button" aria-haspopup="true" aria-expanded="false">Connexion
                     </a>
+
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="{{ path('app_login') }}">Connexion</a>
                         <a class="dropdown-item" href="{{ path('app_register') }}">Enregistrement</a>
@@ -31,10 +32,31 @@
                     </div>
                 </li>
             </ul>
-            <form class="d-flex">
+            <div class="mx-2">
+
+                {% set totalCart = 0 %}
+
+                {% for quantity in app.session.get('cart', []) %}
+                    {% set totalCart = totalCart + quantity %}
+                {% endfor %}
+
+            </div>
+
+            <form class="d-flex ms-3">
                 <input class="form-control me-sm-2" type="search" placeholder="Recherche">
                 <button class="btn btn-secondary my-2 my-sm-0 mt-2" type="submit">🔍</button>
             </form>
+
+            <div class="position-relative ms-3"> 
+                <button class="btn btn-outline-light" type="button"data-bs-toggle="offcanvas"
+                    data-bs-target="#cartOffcanvas">
+
+                    <span class="badge rounded-pill bg-primary text-dark text-center">
+                        {{ totalCart }}
+                    </span>
+                    🛒 
+                </button>
+            </div>
         </div>
     </div>
 </nav>
