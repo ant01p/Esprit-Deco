@@ -31,6 +31,46 @@ class CartHandler
         $session->set('cart', $cart);
     }
 
+    public function decrease(int $id): void
+    {
+        $session = $this->requestStack->getSession();
+        $cart = $session->get('cart', []);
+
+        // si produit n'est pas dans le panier on ne fait rien
+        if (!isset($cart[$id])) {
+            return;
+        }
+
+        // on baisse la quantité
+        $cart[$id]--;
+
+        // si la quantité arrive a 0 on supprime produit du panier
+        if ($cart[$id] <= 0) {
+            unset($cart[$id]);
+        }
+
+        $session->set('cart', $cart);
+    }
+
+     public function remove(int $id): void
+    {
+        $session = $this->requestStack->getSession();
+        $cart = $session->get('cart', []);
+
+        // supprime la ligne du panier
+        unset($cart[$id]);
+
+        $session->set('cart', $cart);
+    }
+
+    public function clear(): void
+    {
+        $session = $this->requestStack->getSession();
+
+        //supprime le panier de la session
+        $session->remove('cart');
+    }
+
     //pour récup le pannier complet
     public function getCart(): array
     {
@@ -48,7 +88,8 @@ class CartHandler
             if ($product) {
                 $cartWithData[] = [
                     'product' => $product,
-                    'quantity' => $quantity
+                    'quantity' => $quantity,
+                    'lineTotal' => $product->getPrice() * $quantity
                 ];
             }
         }
@@ -56,6 +97,7 @@ class CartHandler
         return $cartWithData;
     }
 
+    //badge panier
     public function getTotalQuantity(): int
     {
         $session = $this->requestStack->getSession();
@@ -65,4 +107,18 @@ class CartHandler
         return array_sum($cart);
     }
 
+     public function getTotal(): float
+    {
+        $total = 0;
+
+        // on récupère le panier complet avec les produits
+        $cart = $this->getCart();
+
+        foreach ($cart as $cartLine) {
+            // on ajoute le total de chaque ligne au total général
+            $total += $cartLine['lineTotal'];
+        }
+
+        return $total;
+    }
 }
