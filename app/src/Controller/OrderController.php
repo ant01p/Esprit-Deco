@@ -11,12 +11,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\OrderRepository;
 
 final class OrderController extends AbstractController
 {   
     public function __construct(
         private CartHandler $cartHandler,
         private EntityManagerInterface $entityManager,
+        private OrderRepository $orderRepository
     )
     {
     }
@@ -28,26 +30,29 @@ final class OrderController extends AbstractController
 
         $cart = $this->cartHandler->getCart();
 
-        if (empty($cart)) {
-            $this->addFlash('warning', 'Votre panier est vide.');
+        $order = $this->orderRepository->findOneBy(['user' => $this->getUser(), 'status' => 'pending']);
 
-            return $this->redirectToRoute('app_item_index');
+        if($order) {
+            $address = $order->getAddress();
+        } else {
+            $address = new Address();
         }
-
-        $address = new Address();
 
         $form = $this->createForm(AddressType::class, $address);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $address = $form->getData();
+            
+            if (!$order) {
+                $order = new Order();
+                $order->setUser($this->getUser());
+                $order->setStatus('pending');
+                $order->setCreatedAt(new \DateTimeImmutable());
+                $order->setTotalAmount($this->cartHandler->getTotal());                
+            }
 
-            $order = new Order();
-
-            $order->setUser($this->getUser());
-            $order->setStatus('pending');
-            $order->setCreatedAt(new \DateTimeImmutable());
-            $order->setTotalAmount($this->cartHandler->getTotal());
+            $order->setAddress($address);
             
             $address->setOrderpurchase($order);
 
