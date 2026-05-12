@@ -18,6 +18,8 @@
         <link rel="stylesheet" href="{{ asset('styles/index-cards.css') }}">
     </head>
 
+    
+
     <body class="">
 
         {% include '_shared/_header.html.twig' %}
@@ -31,6 +33,8 @@
         </main>
 
         {% include '_shared/_footer.html.twig' %}
-
+        {% block javascripts %}
+            <script src="{{ asset('js/cart.js') }}" defer></script>
+        {% endblock %}
     </body>
 </html>

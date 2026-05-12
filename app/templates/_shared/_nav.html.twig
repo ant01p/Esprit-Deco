@@ -20,8 +20,13 @@
                     </li>
                 {% endif %}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle mx-2" data-bs-toggle="dropdown" href="#" 
-                        role="button" aria-haspopup="true" aria-expanded="false">Connexion
+                    <a class="nav-link dropdown-toggle mx-2" data-bs-toggle="dropdown" href="#"
+                        role="button" aria-haspopup="true" aria-expanded="false">
+                        {% if app.user %}
+                            {{ app.user.email }}
+                        {% else %}
+                            Connexion
+                        {% endif %}
                     </a>
 
                     <div class="dropdown-menu">
@@ -51,7 +56,7 @@
                 <button class="btn btn-outline-light" type="button"data-bs-toggle="offcanvas"
                     data-bs-target="#cartOffcanvas">
 
-                    <span class="badge rounded-pill bg-primary text-dark text-center">
+                    <span class="badge rounded-pill bg-primary text-dark text-center" id="cart-count">
                         {{ totalCart }}
                     </span>
                     🛒 

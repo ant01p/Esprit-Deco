@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Adresse de livraison{% endblock %}
+
+{% block body %}
+
+    <h1 class="text-center mb-4">Adresse de livraison</h1>
+
+    {{ form_start(form) }}
+
+            <div class="mb-2">
+                {{ form_label(form.fullname) }}
+                {{ form_widget(form.fullname) }}
+                {{ form_errors(form.fullname) }}
+            </div>
+
+            <div class="mb-2">
+                {{ form_label(form.street) }}
+                {{ form_widget(form.street) }}
+                {{ form_errors(form.street) }}
+            </div>
+
+            <div class="mb-2">
+                {{ form_label(form.zipCode) }}
+                {{ form_widget(form.zipCode) }}
+                {{ form_errors(form.zipCode) }}
+            </div>
+
+            <div class="mb-2">
+                {{ form_label(form.city) }}
+                {{ form_widget(form.city) }}
+                {{ form_errors(form.city) }}
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">
+                    Enregistrer
+                </button>
+            </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}

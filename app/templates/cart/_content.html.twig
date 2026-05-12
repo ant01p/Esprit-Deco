@@ -1,0 +1,73 @@
+{% set cart = cartHandler.getCart() %}
+{% set total = cartHandler.getTotal() %}
+
+{% if cart is empty %}
+
+    <p class="text-center">Votre panier est vide.</p>
+
+{% else %}
+
+    <table class="table table-hover ">
+
+        <tbody>
+            {% for item in cart %}
+
+                <tr class="table-secondary">
+                    <td>
+                        {{ item.product.title }}
+                        <span>
+                            ({{ item.product.price|number_format(2, ',', ' ') }} €)
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="d-flex justify-content-center align-items-center gap-2">
+
+                            <button class=" cart-action btn btn-sm btn-primary rounded-circle 
+                                d-flex justify-content-center align-items-center" 
+                                style="width: 20px; height: 20px;" 
+                                data-url="{{ path('cart_decrease', { 'id': item.product.id }) }}">
+                                -
+                            </button>
+
+                            <span class="mx-2">{{ item.quantity }}</span>
+
+                            <button class=" cart-action btn btn-sm btn-primary rounded-circle 
+                                d-flex justify-content-center align-items-center" 
+                                style="width: 20px; height: 20px;" 
+                                data-url="{{ path('cart_add', { 'id': item.product.id }) }}">
+                                +
+                            </button>
+                        </div>
+                    </td>
+
+                    <td>
+                        {{ item.lineTotal|number_format(2, ',', ' ') }} €
+                    </td>
+                </tr>
+            {% endfor %}
+
+            <tr class="table-dark">
+                <td class="text-start">
+                    <button class=" cart-action badge rounded-pill bg-primary" data-url="{{ path('cart_clear') }}">Vider le panier</button>
+                </td>
+
+                <td class="fw-bold">
+                    TOTAL
+                </td>
+
+                <td class="fw-bold">
+                    {{ total|number_format(2, ',', ' ') }} €
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+
+    <div class="text-end">
+        <a href="{{ path('app_order_delivery_address') }}" class="btn btn-primary">
+            Payer
+        </a>
+    </div>
+
+{% endif %}
