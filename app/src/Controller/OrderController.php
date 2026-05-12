@@ -40,7 +40,7 @@ final class OrderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $adress = $form->getData();
+            $address = $form->getData();
 
             $order = new Order();
 
