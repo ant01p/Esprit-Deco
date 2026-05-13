@@ -4,9 +4,6 @@
 
 {% block body %}
 
-    {% set cart = cartHandler.getCart() %}
-    {% set total = cartHandler.getTotal() %}
-
     <div class=" ">
 
         <div class="container">
@@ -83,11 +80,11 @@
 
             <div class="d-flex justify-content-between align-items-center">
 
-                <a href="{{ path('app_order_delivery_address') }}" class="btn btn-secondary btn-sm">
+                <a href="{{ path("app_order_delivery_address") }}" class="btn btn-secondary btn-sm">
                     Modifier l’adresse de livraison
                 </a>
 
-                <a href="#" class="btn btn-primary btn-sm">
+                <a href="{{ path("app_order_confirm") }}" class="btn btn-primary btn-sm">
                     Confirmer
                 </a>
             </div>
