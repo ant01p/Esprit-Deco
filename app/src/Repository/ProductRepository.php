@@ -44,6 +44,21 @@ class ProductRepository extends ServiceEntityRepository
         ;
     }
 
+    //index with category filter
+    public function findByCategoryWithPrincipalImage(int $categoryId): array
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.category', 'c')
+            ->addSelect('c')
+            ->leftJoin('p.images', 'i', 'WITH', 'i.isPrincipal = true')
+            ->addSelect('i')
+            ->where('c.id = :categoryId')
+            ->setParameter('categoryId', $categoryId)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     //admin-products
     public function findAllWithCategories(): array
     {

@@ -4,6 +4,22 @@
 
     <h1 class="text-center mb-4">Nos produits</h1>
 
+    {% set badgeColors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger'] %}
+
+    <div class="text-center mb-4">
+        <a href="{{ path('app_item_index') }}"
+           class="badge text-bg-light me-1 mb-1 text-decoration-none fs-6 {% if currentCategoryId == 0 %}border border-2 border-white fw-bold{% endif %}">
+            Toutes les catégories
+        </a>
+        {% for cat in categories %}
+            {% set color = badgeColors[loop.index0 % 6] %}
+            <a href="{{ path('app_item_index', {category: cat.id}) }}"
+               class="badge text-bg-{{ color }} me-1 mb-1 text-decoration-none fs-6 {% if currentCategoryId == cat.id %}border border-2 border-white fw-bold{% endif %}">
+                {{ cat.name }}
+            </a>
+        {% endfor %}
+    </div>
+
     <div class="row g-4">
         {% for product in products %}
 
