@@ -19,7 +19,13 @@ final class ItemController extends AbstractController
         $categoryId = $request->query->getInt('category', 0);
 
         if ($categoryId > 0) {
-            $found = array_filter($categories, fn($c) => $c->getId() === $categoryId);
+            $found = false;
+            foreach ($categories as $cat) {
+                if ($cat->getId() === $categoryId) {
+                    $found = true;
+                    break;
+                }
+            }
             if (!$found) {
                 return $this->redirectToRoute('app_item_index');
             }
