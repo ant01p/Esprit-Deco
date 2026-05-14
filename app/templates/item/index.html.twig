@@ -7,17 +7,38 @@
     {% set badgeColors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger'] %}
 
     <div class="text-center mb-4">
-        <a href="{{ path('app_item_index') }}"
+        <a href="{{ path('app_item_index', {price: currentPrice}) }}"
            class="badge text-bg-light me-1 mb-1 text-decoration-none fs-6 {% if currentCategoryId == 0 %}border border-2 border-white fw-bold{% endif %}">
             Toutes les catégories
         </a>
         {% for cat in categories %}
             {% set color = badgeColors[loop.index0 % 6] %}
-            <a href="{{ path('app_item_index', {category: cat.id}) }}"
+            <a href="{{ path('app_item_index', {category: cat.id, price: currentPrice}) }}"
                class="badge text-bg-{{ color }} me-1 mb-1 text-decoration-none fs-6 {% if currentCategoryId == cat.id %}border border-2 border-white fw-bold{% endif %}">
                 {{ cat.name }}
             </a>
         {% endfor %}
+    </div>
+
+    <div class="text-center mb-4">
+        {% set priceFilters = {
+            'lt100':     '< 100 €',
+            '100to500':  '100 – 500 €',
+            '500to1000': '500 – 1 000 €',
+            'gt1000':    '> 1 000 €'
+        } %}
+        {% for key, label in priceFilters %}
+            <a href="{{ path('app_item_index', {category: currentCategoryId, price: key}) }}"
+               class="badge text-bg-secondary me-1 mb-1 text-decoration-none fs-6 {% if currentPrice == key %}border border-2 border-white fw-bold{% endif %}">
+                {{ label }}
+            </a>
+        {% endfor %}
+        {% if currentPrice %}
+            <a href="{{ path('app_item_index', {category: currentCategoryId}) }}"
+               class="badge text-bg-light me-1 mb-1 text-decoration-none fs-6">
+                ✕ Prix
+            </a>
+        {% endif %}
     </div>
 
     <div class="row g-4">

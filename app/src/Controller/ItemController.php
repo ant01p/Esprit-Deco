@@ -17,6 +17,12 @@ final class ItemController extends AbstractController
     {
         $categories = $categoryRepository->findAll();
         $categoryId = $request->query->getInt('category', 0);
+        $priceFilter = $request->query->get('price');
+
+        $validPrices = ['lt100', '100to500', '500to1000', 'gt1000'];
+        if (!in_array($priceFilter, $validPrices, true)) {
+            $priceFilter = null;
+        }
 
         if ($categoryId > 0) {
             $found = false;
@@ -29,15 +35,15 @@ final class ItemController extends AbstractController
             if (!$found) {
                 return $this->redirectToRoute('app_item_index');
             }
-            $products = $productRepository->findByCategoryWithPrincipalImage($categoryId);
-        } else {
-            $products = $productRepository->findAllWithPrincipalImage();
         }
 
+        $products = $productRepository->findWithFilters($categoryId, $priceFilter);
+
         return $this->render('item/index.html.twig', [
-            'products' => $products,
-            'categories' => $categories,
+            'products'          => $products,
+            'categories'        => $categories,
             'currentCategoryId' => $categoryId,
+            'currentPrice'      => $priceFilter,
         ]);
     }
 

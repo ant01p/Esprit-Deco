@@ -17,16 +17,27 @@ class ProductRepository extends ServiceEntityRepository
     }
      
     //index
-    public function findAllWithPrincipalImage(): array
+    public function findWithFilters(int $categoryId, ?string $priceFilter): array
     {
-        return $this->createQueryBuilder('p')
+        $qb = $this->createQueryBuilder('p')
             ->leftJoin('p.category', 'c')
             ->addSelect('c')
             ->leftJoin('p.images', 'i', 'WITH', 'i.isPrincipal = true')
-            ->addSelect('i')
-            ->getQuery()
-            ->getResult()
-        ;
+            ->addSelect('i');
+
+        if ($categoryId > 0) {
+            $qb->andWhere('c.id = :categoryId')->setParameter('categoryId', $categoryId);
+        }
+
+        match ($priceFilter) {
+            'lt100'      => $qb->andWhere('p.price < 100'),
+            '100to500'   => $qb->andWhere('p.price >= 100 AND p.price <= 500'),
+            '500to1000'  => $qb->andWhere('p.price > 500 AND p.price <= 1000'),
+            'gt1000'     => $qb->andWhere('p.price > 1000'),
+            default      => null,
+        };
+
+        return $qb->getQuery()->getResult();
     }
 
     //show
@@ -41,21 +52,6 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult()
-        ;
-    }
-
-    //index with category filter
-    public function findByCategoryWithPrincipalImage(int $categoryId): array
-    {
-        return $this->createQueryBuilder('p')
-            ->leftJoin('p.category', 'c')
-            ->addSelect('c')
-            ->leftJoin('p.images', 'i', 'WITH', 'i.isPrincipal = true')
-            ->addSelect('i')
-            ->where('c.id = :categoryId')
-            ->setParameter('categoryId', $categoryId)
-            ->getQuery()
-            ->getResult()
         ;
     }
 
